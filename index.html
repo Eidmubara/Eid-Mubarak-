@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eid Mubarak Photo Editor</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#14532d,#1e293b);
+    min-height:100vh;
+    padding:20px;
+    color:white;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.title h1{
+    font-size:3rem;
+    color:#facc15;
+}
+
+.title p{
+    margin-top:10px;
+    color:#ddd;
+    font-size:18px;
+}
+
+.eid-prayer{
+    background:rgba(255,255,255,0.1);
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:25px;
+    text-align:center;
+    backdrop-filter:blur(10px);
+}
+
+.eid-prayer p{
+    line-height:1.8;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.editor{
+    display:grid;
+    grid-template-columns:1fr 330px;
+    gap:20px;
+}
+
+@media(max-width:900px){
+    .editor{
+        grid-template-columns:1fr;
+    }
+}
+
+.canvas-box{
+    background:rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:25px;
+    backdrop-filter:blur(10px);
+}
+
+canvas{
+    width:100%;
+    border-radius:20px;
+    background:white;
+}
+
+.controls{
+    background:rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:25px;
+    backdrop-filter:blur(10px);
+}
+
+.controls h2{
+    color:#facc15;
+    margin-bottom:12px;
+}
+
+.upload-btn{
+    display:block;
+    width:100%;
+    padding:14px;
+    background:#facc15;
+    color:black;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:15px;
+}
+
+input[type=file]{
+    display:none;
+}
+
+.backgrounds{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.bg{
+    height:85px;
+    border-radius:15px;
+    cursor:pointer;
+    border:3px solid transparent;
+    transition:0.3s;
+}
+
+.bg:hover{
+    transform:scale(1.03);
+    border-color:white;
+}
+
+/* BACKGROUNDS */
+
+.bg1{
+    background:linear-gradient(135deg,#065f46,#facc15);
+}
+
+.bg2{
+    background:linear-gradient(135deg,#7c3aed,#f472b6);
+}
+
+.bg3{
+    background:linear-gradient(135deg,#0ea5e9,#22c55e);
+}
+
+.bg4{
+    background:linear-gradient(135deg,#ef4444,#f59e0b);
+}
+
+.bg5{
+    background:linear-gradient(135deg,#111827,#06b6d4);
+}
+
+.bg6{
+    background:linear-gradient(135deg,#14532d,#22c55e);
+}
+
+.bg7{
+    background:linear-gradient(135deg,#1e1b4b,#c084fc,#facc15);
+}
+
+.bg8{
+    background:linear-gradient(135deg,#064e3b,#14b8a6,#99f6e4);
+}
+
+.bg9{
+    background:linear-gradient(135deg,#7f1d1d,#fb7185,#fde68a);
+}
+
+.bg10{
+    background:linear-gradient(135deg,#0f172a,#38bdf8,#e0f2fe);
+}
+
+button,select{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+button{
+    background:#22c55e;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.footer{
+    text-align:center;
+    margin-top:25px;
+    color:#ddd;
+}
+
+.designer{
+    color:#facc15;
+    font-weight:bold;
+    margin-top:10px;
+    font-size:18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>Eid Mubarak 🌙</h1>
+        <p>Create and download beautiful Eid celebration photos</p>
+    </div>
+
+    <div class="eid-prayer">
+        <p>
+            عيد مبارك 🌙✨ <br><br>
+            تقبل الله منا ومنكم صالح الأعمال،
+            وجعل الله أيامكم فرحًا وسعادةً وبركة،
+            وكل عام وأنتم بخير 🤍
+        </p>
+    </div>
+
+    <div class="editor">
+
+        <div class="canvas-box">
+            <canvas id="canvas" width="900" height="900"></canvas>
+        </div>
+
+        <div class="controls">
+
+            <h2>Upload Image</h2>
+
+            <label class="upload-btn">
+                Choose Photo
+                <input type="file" id="upload" accept="image/*">
+            </label>
+
+            <h2>Select Beautiful Background</h2>
+
+            <div class="backgrounds">
+                <div class="bg bg1" onclick="changeBG(1)"></div>
+                <div class="bg bg2" onclick="changeBG(2)"></div>
+                <div class="bg bg3" onclick="changeBG(3)"></div>
+                <div class="bg bg4" onclick="changeBG(4)"></div>
+                <div class="bg bg5" onclick="changeBG(5)"></div>
+                <div class="bg bg6" onclick="changeBG(6)"></div>
+                <div class="bg bg7" onclick="changeBG(7)"></div>
+                <div class="bg bg8" onclick="changeBG(8)"></div>
+                <div class="bg bg9" onclick="changeBG(9)"></div>
+                <div class="bg bg10" onclick="changeBG(10)"></div>
+            </div>
+
+            <h2>Download Format</h2>
+
+            <select id="format">
+                <option value="png">PNG</option>
+                <option value="jpeg">JPG</option>
+                <option value="webp">WEBP</option>
+            </select>
+
+            <button onclick="downloadImage()">
+                Download Image
+            </button>
+
+            <h2>Rate This Website</h2>
+
+            <select id="rating">
+                <option value="⭐ 1 Star">⭐ 1 Star</option>
+                <option value="⭐ 2 Stars">⭐ 2 Stars</option>
+                <option value="⭐ 3 Stars">⭐ 3 Stars</option>
+                <option value="⭐ 4 Stars">⭐ 4 Stars</option>
+                <option value="⭐ 5 Stars">⭐ 5 Stars</option>
+            </select>
+
+            <button onclick="sendRating()">
+                Submit Rating
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Made with ❤️ for Eid Celebration</p>
+
+        <div class="designer">
+            Designed by IUD
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let uploadedImage = null;
+let currentBG = 1;
+
+function setBackground(){
+
+    const gradients = {
+
+        1:["#065f46","#facc15"],
+        2:["#7c3aed","#f472b6"],
+        3:["#0ea5e9","#22c55e"],
+        4:["#ef4444","#f59e0b"],
+        5:["#111827","#06b6d4"],
+        6:["#14532d","#22c55e"],
+        7:["#1e1b4b","#c084fc","#facc15"],
+        8:["#064e3b","#14b8a6","#99f6e4"],
+        9:["#7f1d1d","#fb7185","#fde68a"],
+        10:["#0f172a","#38bdf8","#e0f2fe"]
+
+    };
+
+    const g = ctx.createLinearGradient(0,0,900,900);
+
+    const colors = gradients[currentBG];
+
+    if(colors.length === 2){
+
+        g.addColorStop(0,colors[0]);
+        g.addColorStop(1,colors[1]);
+
+    }else{
+
+        g.addColorStop(0,colors[0]);
+        g.addColorStop(0.5,colors[1]);
+        g.addColorStop(1,colors[2]);
+    }
+
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,900,900);
+}
+
+function drawDecorations(){
+
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+
+    ctx.beginPath();
+    ctx.arc(720,160,90,0,Math.PI*2);
+    ctx.fill();
+
+    for(let i=0;i<30;i++){
+
+        ctx.beginPath();
+
+        ctx.arc(
+            Math.random()*900,
+            Math.random()*900,
+            Math.random()*3,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+}
+
+function drawCanvas(){
+
+    setBackground();
+
+    drawDecorations();
+
+    ctx.fillStyle = "white";
+
+    ctx.font = "bold 58px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Eid Mubarak",450,80);
+
+    ctx.font = "42px Arial";
+    ctx.fillText("عيد مبارك",450,140);
+
+    if(uploadedImage){
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.arc(450,500,240,0,Math.PI*2);
+        ctx.closePath();
+        ctx.clip();
+
+        ctx.drawImage(uploadedImage,210,260,480,480);
+
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.arc(450,500,245,0,Math.PI*2);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+    }
+
+    ctx.fillStyle = "rgba(255,255,255,0.15)";
+    ctx.fillRect(120,760,660,80);
+
+    ctx.fillStyle = "white";
+    ctx.font = "bold 28px Arial";
+    ctx.fillText("Taqabbalallahu منا ومنكم",450,810);
+}
+
+drawCanvas();
+
+document.getElementById("upload").addEventListener("change",function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+
+        const img = new Image();
+
+        img.onload = function(){
+
+            uploadedImage = img;
+            drawCanvas();
+        }
+
+        img.src = event.target.result;
+    }
+
+    reader.readAsDataURL(file);
+});
+
+function changeBG(num){
+
+    currentBG = num;
+    drawCanvas();
+}
+
+function downloadImage(){
+
+    const format = document.getElementById("format").value;
+
+    let mime = "image/png";
+
+    if(format === "jpeg"){
+        mime = "image/jpeg";
+    }
+
+    if(format === "webp"){
+        mime = "image/webp";
+    }
+
+    const link = document.createElement("a");
+
+    link.download = "eid-mubarak-by-IUD." + format;
+
+    link.href = canvas.toDataURL(mime);
+
+    link.click();
+}
+
+function sendRating(){
+
+    const rating = document.getElementById("rating").value;
+
+    const message =
+        "🌙 Eid Mubarak Website Rating%0A%0A" +
+        "Rating: " + rating + "%0A" +
+        "Designer: IUD";
+
+    const whatsappURL =
+        "https://wa.me/2348122951530?text=" + message;
+
+    window.open(whatsappURL,"_blank");
+}
+
+</script>
+
+</body>
+</html>
